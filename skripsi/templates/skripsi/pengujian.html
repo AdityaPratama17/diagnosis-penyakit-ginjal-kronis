@@ -1,0 +1,412 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block customstyle %}
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css">
+{% endblock customstyle %}
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Pengujian</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active"><a href="">Home</a></li>
+                        <li class="breadcrumb-item active">Pengujian</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Main content -->
+  <section class="content">
+        <div class="container-fluid">
+            <!-- FORM PARAMETER -->
+            <div class="row mb-2">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body">
+                            <form action="{% url 'skripsi:pengujian' %}" method="post">
+                                {% csrf_token %}
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="fold">Diskritisasi</label>
+                                            <select class="custom-select rounded-0" id="diskrit" name="diskrit" onchange="checkDiskritisasi(this);">
+                                                <option value="lama" {% if old.diskrit == 'lama' %} selected {% endif %}>Jangan perbarui rentang data diskritisasi</option>
+                                                <option value="baru" {% if old.diskrit == 'baru' %} selected {% endif %}>Perbarui rentang data diskritisasi</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="seleksi">Seleksi Fitur</label>
+                                            <select class="custom-select rounded-0" id="seleksi" name="seleksi" onchange="showDiv('hidden_div', this)">
+                                                <option value="no" {% if old.seleksi == 'no' %} selected {% endif %}>Jangan lakukan seleksi fitur</option>
+                                                <option value="yes" {% if old.seleksi == 'yes' %} selected {% endif %}>Lakukan seleksi fitur</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="hidden_div" {% if old.seleksi == 'yes' %} style="display: block;" {% else %} style="display: none;" {% endif %} >
+                                    <div class="row mb-3">
+                                        <div class="col-md-4">
+                                            <label for="partikel">Jumlah partikel</label>
+                                            <input type="text" class="form-control rounded-0" id="partikel" name="partikel" value="{% if old.partikel %}{{ old.partikel }}{% else %}15{% endif %}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="iterasi">Jumlah iterasi</label>
+                                            <input type="text" class="form-control rounded-0" id="iterasi" name="iterasi" value="{% if old.iterasi %}{{ old.iterasi }}{% else %}40{% endif %}">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label for="w">Inertia weight (w)</label>
+                                            <input type="text" class="form-control rounded-0" id="w" name="w" value="{% if old.w %}{{ old.w }}{% else %}0.9{% endif %}">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-1">
+                                        <div class="col-md-6">
+                                            <label for="c1">Faktor cognitive learning (c1)</label>
+                                            <input type="text" class="form-control rounded-0" id="c1" name="c1" value="{% if old.c1 %}{{ old.c1 }}{% else %}1{% endif %}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="c2">Faktor social learning (c2)</label>
+                                            <input type="text" class="form-control rounded-0" id="c2" name="c2" value="{% if old.c2 %}{{ old.c2 }}{% else %}1.2{% endif %}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-info mt-3"><i class="fas fa-sync-alt mr-2"></i>Proses</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {% if old %}
+            <!-- HASIL PENGUJIAN -->
+            <div class="row mb-2">
+                <div class="col-md-3">
+                    <div class="card h-100 card-primary card-outline">
+                        <div class="card-body text-center">
+                            <h6>rata-rata</h6>
+                            <h5 style="margin-top: -10px;"><b>Accuracy</b></h5><hr>
+                            <h1><b>{{ result_avg.accuracy }}%</b></h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 card-primary card-outline">
+                        <div class="card-body text-center">
+                            <h6>rata-rata</h6>
+                            <h5 style="margin-top: -10px;"><b>Precision</b></h5><hr>
+                            <h1><b>{{ result_avg.precision }}%</b></h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 card-primary card-outline">
+                        <div class="card-body text-center">
+                            <h6>rata-rata</h6>
+                            <h5 style="margin-top: -10px;"><b>Recall</b></h5><hr>
+                            <h1><b>{{ result_avg.recall }}%</b></h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card h-100 card-primary card-outline">
+                        <div class="card-body text-center">
+                            <h6>rata-rata</h6>
+                            <h5 style="margin-top: -10px;"><b>F-Measure</b></h5><hr>
+                            <h1><b>{{ result_avg.f_measure }}%</b></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row my-2">
+                {% if jumlah_atribut != 24 %}
+                <div class="col-6">
+                    <div class="card h-100 card-primary card-outline">
+                        <div class="card-body text-center">
+                            <h6>rata-rata</h6>
+                            <h5 style="margin-top: -10px;"><b>Waktu Komputasi Seleksi Fitur</b></h5><hr>
+                            <h1><b>{{ time_bpso }} detik</b></h1>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <div class="{% if jumlah_atribut != 24 %} col-6 {% else %} col-12 {% endif %}">
+                    <div class="card h-100 card-primary card-outline">
+                        <div class="card-body text-center">
+                            <h6>rata-rata</h6>
+                            <h5 style="margin-top: -10px;"><b>Waktu Komputasi Klasifikasi</b></h5><hr>
+                            <h1><b>{{ result_avg.time }} detik</b></h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- KMEANS -->
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"><b>Diskritisasi (K-Means)</b></h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                                {% for key,value in ranges.items %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% if forloop.counter == 1 %} active {% endif %}" id="custom-content-below-{{ key }}-tab" data-toggle="pill" href="#custom-content-below-{{ key }}" role="tab" aria-controls="custom-content-below-{{ key }}" aria-selected="false">{{ key }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="tab-content p-3" id="custom-content-below-tabContent">
+                                {% for key,value in ranges.items %}
+                                <div class="tab-pane fade {% if forloop.counter == 1 %} show active {% endif %}" id="custom-content-below-{{ key }}" role="tabpanel" aria-labelledby="custom-content-below-{{ key }}-tab">
+                                    <div class="row">
+                                        <div class="col-md-7">
+                                            {% for key_plot,value_plot in plot.items %}
+                                                {% if key == key_plot %}
+                                                <img src="data:image/png;base64,{{ value_plot }}" alt="" style="width: 100%;">
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <div class="col-md-5">
+                                            <h6><b>Ranges</b></h6>
+                                            <ul class="list-group">                                                    
+                                                {% for i in value %}
+                                                <!-- <li class="list-group-item"><b>{{ i.diskrit }} </b> : {{ i.range }}</li> -->
+                                                <li class="list-group-item">{{ i.range|safe }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <!-- BPSO -->
+                {% if jumlah_atribut != 24 %}                
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <div class="card card-outline card-primary">
+                            <div class="card-header">
+                                <h3 class="card-title"><b>Seleksi Fitur (BPSO)</b></h3>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <span class="text-muted float-left d-inline">Jumlah atribut yang digunakan adalah {{ jumlah_atribut }} dari 24 atribut</span>
+                                <table id="atribut" class="table table-hover" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Atribut</th>
+                                            <th>Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for key,value in seleksi.items  %}
+                                        <tr>
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ value.atr_panjang }} ({{ value.atr_pendek }})</td>
+                                            <td>{{ value.keterangan }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+            <!-- C4.5 -->
+            <div class="row mb-2">
+                <div class="col-12">
+                    <div class="card card-outline card-primary">
+                        <div class="card-header">
+                            <h3 class="card-title"><b>Klasifikasi (C4.5)</b></h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="nav nav-tabs" id="custom-content-below-tab" role="tablist">
+                                {% for key,value in pengujian.items %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% if forloop.counter == 1 %} active {% endif %}" id="custom-content-below-{{ key }}-tab" data-toggle="pill" href="#custom-content-below-{{ key }}" role="tab" aria-controls="custom-content-below-{{ key }}" aria-selected="false">Fold-{{ key }}</a>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <div class="tab-content p-3" id="custom-content-below-tabContent">
+                                {% for key,value in pengujian.items %}
+                                <div class="tab-pane fade {% if forloop.counter == 1 %} show active {% endif %}" id="custom-content-below-{{ key }}" role="tabpanel" aria-labelledby="custom-content-below-{{ key }}-tab">
+                                    <div class="row">
+                                        <!-- RESULT -->
+                                        <div class="col-md-6">
+                                            <div class="card h-100">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Hasil Evaluasi</h3>
+                                                </div>
+                                                <div class="card-body px-1 py-2">
+                                                    <table class="table table-borderless table-sm" style="width:100%;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>Accuracy</td>
+                                                                <td class="text-center"> : </td>
+                                                                <td>{{ value.result.accuracy }}%</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Recall</td>
+                                                                <td class="text-center"> : </td>
+                                                                <td>{{ value.result.recall }}%</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Precision</td>
+                                                                <td class="text-center"> : </td>
+                                                                <td>{{ value.result.precision }}%</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>F-Measure</td>
+                                                                <td class="text-center"> : </td>
+                                                                <td>{{ value.result.f_measure }}%</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>Waktu Komputasi</td>
+                                                                <td> : </td>
+                                                                <td>{{ value.time }} detik</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- CONFUSION -->
+                                        <div class="col-md-6">
+                                            <div class="card h-100">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Confusion Matrix</h3>
+                                                </div>
+                                                <div class="card-body px-1 py-2 col-8">
+                                                    <table class="table table-borderless table-sm">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>True CKD</td>
+                                                                <td class="text-center"> : </td>
+                                                                <td>{{ value.cm.0 }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>True NOTCKD</td>
+                                                                <td class="text-center"> : </td>
+                                                                <td>{{ value.cm.1 }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>False CKD</td>
+                                                                <td class="text-center"> : </td>
+                                                                <td>{{ value.cm.2 }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>False NOTCKD</td>
+                                                                <td class="text-center"> : </td>
+                                                                <td>{{ value.cm.3 }}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- TREE -->
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h3 class="card-title">Rules</h3>
+                                                </div>
+                                                <div class="card-body p-0">
+                                                    <ul class="list-group list-group-flush">                                                    
+                                                        {% for i in value.tree %}
+                                                        <li class="list-group-item">{{ i }}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- BUTTON TO UP -->
+            <a id="back-to-top" href="#" class="btn btn-sm btn-primary back-to-top shadow" role="button" aria-label="Scroll to top">
+                <i class="fas fa-chevron-up"></i>
+            </a>
+        </div>
+  </section>
+</div>
+{% endblock content %}
+
+
+{% block customscript %}
+<!-- SHOW PARAM BPSO FORM -->
+<script>
+    document.getElementById('seleksi').addEventListener('change', function () {
+        var style = this.value == 'yes' ? 'block' : 'none';
+        document.getElementById('hidden_div').style.display = style;
+    });
+</script>
+
+<script>
+    function checkDiskritisasi(element) {
+        if (element.options[element.selectedIndex].value == 'baru'){
+            if (! confirm("Anda yakin untuk memperbarui rentang data diskritisasi?")){
+                element.selectedIndex = 'lama';
+            } 
+        } 
+    }
+</script>
+
+<!-- DATATABLE -->
+<script>
+    $(document).ready(function() {
+        $('#atribut').DataTable({
+            "scrollY": "259px",
+            "scrollCollapse": true,
+            "paging": false,
+            "ordering": true,
+            "searching": true,
+            "info": false,
+        });
+    } );
+</script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+{% endblock customscript %}
+    
+    

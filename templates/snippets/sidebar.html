@@ -1,0 +1,39 @@
+{% load static %}
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+  <!-- Brand Logo -->
+  <a href="#" class="brand-link">
+    <img src="{%static 'vendor/dist/img/AdminLTELogo.png'%}" alt="AdminLTE Logo"
+      class="brand-image img-circle elevation-3" style="opacity: .8">
+    <span class="brand-text font-weight-light">SKRIPSI</span>
+  </a>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+      <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+        <li class="nav-item">
+          <a href="{% url 'skripsi:dataset' %}" class="nav-link {% if title == 'Dataset' %} active {% endif %}">
+            <i class="nav-icon fas fa-database"></i>
+            <p>Dataset</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'skripsi:diagnosis' %}" class="nav-link {% if title == 'Diagnosis' %} active {% endif %}">
+            <i class="nav-icon fas fa-diagnoses"></i>
+            <p>Diagnosis</p>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="{% url 'skripsi:pengujian' %}" class="nav-link {% if title == 'Pengujian' %} active {% endif %}">
+            <i class="nav-icon fas fa-chart-bar"></i>
+            <p>Pengujian</p>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+  </div>
+  <!-- /.sidebar -->
+</aside>

@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block customstyle %}
+<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css"> -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css">
+<style>
+    .table-wrapper {
+    max-height: 100px;
+    overflow: auto;
+    display:inline-block;
+    }
+    .table-earnings {
+    background: #F3F5F6;
+    }
+</style>
+{% endblock customstyle %}
+    
+
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Dataset</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active"><a href="">Home</a></li>
+                        <li class="breadcrumb-item active">Dataset</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Main content -->
+  <section class="content">
+        <div class="container-fluid">
+            <!-- DATASET -->
+            <div class="row mb-2">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body">
+                            <table id="dataset" class="table table-hover table-bordered" style="width:100%">
+                                <thead>
+                                    <tr class="text-center">
+                                        <th>#</th>
+                                        {% for key,value in atribut.items %}
+                                        <th>{{ key }}</th>
+                                        {% endfor %}
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for data in dataset %}
+                                    <tr class="text-center">
+                                        <td>{{ forloop.counter }}</td>
+                                        {% for value in data %}
+                                            {% if value == '?' %}
+                                            <td>-</td>
+                                            {% else %}
+                                            <td>{{ value }}</td>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row pb-4">
+                <div class="col-md-7">
+                    <!-- ATRIBUT -->
+                    <div class="card card-primary card-outline">
+                        <div class="card-body">
+                            <table id="atribut" class="table table-hover" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Atribut</th>
+                                        <th>Deskripsi</th>
+                                        <th>Tipe data</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for key,value in atribut.items  %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ key }}</td>
+                                        <td>{{ value.0 }}</td>
+                                        <td>{{ value.1 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body">
+                            <h6>Seluruh data</h6>
+                            <div class="progress mb-3" style="height: 20px;" style="height: 20px;">
+                                <div class="progress-bar progress-bar-striped bg-success font-weight-bold" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">400 data</div>
+                            </div>
+                            <h6>Data dengan missing value</h6>
+                            <div class="progress mb-3" style="height: 20px;">
+                                <div class="progress-bar progress-bar-striped bg-info font-weight-bold" role="progressbar" style="width: 60.5%;" aria-valuenow="60.5" aria-valuemin="0" aria-valuemax="100">242 data</div>
+                            </div>
+                            <h6>Data tanpa missing value</h6>
+                            <div class="progress mb-3" style="height: 20px;">
+                                <div class="progress-bar progress-bar-striped bg-danger font-weight-bold" role="progressbar" style="width: 39.5%;" aria-valuenow="39.5" aria-valuemin="0" aria-valuemax="100">158 data  </div>
+                            </div>
+                            <h6>Data dengan kelas CKD</h6>
+                            <div class="progress mb-3" style="height: 20px;">
+                                <div class="progress-bar progress-bar-striped bg-warning font-weight-bold" role="progressbar" style="width: 62.5%;" aria-valuenow="62.5" aria-valuemin="0" aria-valuemax="100">250 data</div>
+                            </div>
+                            <h6>Data dengan kelas NOTCKD</h6>
+                            <!-- <div class="progress justify-content-end mb-3" style="height: 20px;"> -->
+                            <div class="progress mb-3" style="height: 20px;">
+                                <div class="progress-bar progress-bar-striped font-weight-bold" role="progressbar" style="width: 37.5%;" aria-valuenow="37" aria-valuemin="0" aria-valuemax="100">150 data</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </section>
+</div>
+{% endblock content %}
+
+
+{% block customscript %}
+<script>
+    $(document).ready(function() {
+        $('#dataset').DataTable({
+            "scrollX": true,
+        });
+        $('#atribut').DataTable({
+            "scrollY": "259px",
+            "scrollCollapse": true,
+            "paging": false,
+            "ordering": true,
+            "searching": false,
+            "info": false,
+        });
+    } );
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+<script src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+{% endblock customscript %}
+    

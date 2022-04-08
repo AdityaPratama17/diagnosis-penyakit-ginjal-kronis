@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+    
+{% block content %}
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0">Diagnosis</h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item active"><a href="">Home</a></li>
+                        <li class="breadcrumb-item active">Diagnosis</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <!-- Main content -->
+  <section class="content">
+        <div class="container-fluid">
+            <!-- FORM -->
+            <div class="row mb-2">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-body">
+                            <form action="{% url 'skripsi:diagnosis' %}" method="post">
+                                {% csrf_token %}
+                                <div class="row mb-1">
+                                    <div class="col-md-3">
+                                        <label for="Age">Age (Age)</label>
+                                        <input type="text" class="form-control rounded-0" id="Age" name="Age" value="{% if old.Age %}{{ old.Age }}{% else %}58{% endif %}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Bp">Blood pressure (Bp)</label>
+                                        <input type="text" class="form-control rounded-0" id="Bp" name="Bp" value="{% if old.Bp %}{{ old.Bp }}{% else %}80{% endif %}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Sg">Specific gravity (Sg)</label>
+                                            <select class="custom-select rounded-0" id="Sg" name="Sg">
+                                                <option value="1" {% if old.Sg == '1' %} selected {% endif %}>1.005</option>
+                                                <option value="2" {% if old.Sg == '2' %} selected {% endif %}>1.010</option>
+                                                <option value="3" {% if old.Sg == '3' %} selected {% endif %}>1.015</option>
+                                                <option value="4" {% if old.Sg == '4' %} selected {% endif %}>1.020</option>
+                                                <option value="5" {% if old.Sg == '5' %} selected {% endif %}>1.025</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Al">Albumin (Al)</label>
+                                            <select class="custom-select rounded-0" id="Al" name="Al">
+                                                <option value="1" {% if old.Al == '1' %} selected {% endif %}>0</option>
+                                                <option value="2" {% if old.Al == '2' %} selected {% endif %}>1</option>
+                                                <option value="3" {% if old.Al == '3' %} selected {% endif %}>2</option>
+                                                <option value="4" {% if old.Al == '4' %} selected {% endif %}>3</option>
+                                                <option value="5" {% if old.Al == '5' %} selected {% endif %}>4</option>
+                                                <option value="6" {% if old.Al == '6' %} selected {% endif %}>5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Su">Sugar (Su)</label>
+                                            <select class="custom-select rounded-0" id="Su" name="Su">
+                                                <option value="1" {% if old.Su == '1' %} selected {% endif %}>0</option>
+                                                <option value="2" {% if old.Su == '2' %} selected {% endif %}>1</option>
+                                                <option value="3" {% if old.Su == '3' %} selected {% endif %}>2</option>
+                                                <option value="4" {% if old.Su == '4' %} selected {% endif %}>3</option>
+                                                <option value="5" {% if old.Su == '5' %} selected {% endif %}>4</option>
+                                                <option value="6" {% if old.Su == '6' %} selected {% endif %}>5</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Rbc">Red blood cells (Rbc)</label>
+                                            <select class="custom-select rounded-0" id="Rbc" name="Rbc">
+                                                <option value="1" {% if old.Rbc == '1' %} selected {% endif %}>normal</option>
+                                                <option value="2" {% if old.Rbc == '2' %} selected {% endif %}>abnormal</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Pc">Pus cell (Pc)</label>
+                                            <select class="custom-select rounded-0" id="Pc" name="Pc">
+                                                <option value="1" {% if old.Pc == '1' %} selected {% endif %}>normal</option>
+                                                <option value="2" {% if old.Pc == '2' %} selected {% endif %}>abnormal</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Pcc">Pus cell clumps (Pcc)</label>
+                                            <select class="custom-select rounded-0" id="Pcc" name="Pcc">
+                                                <option value="1" {% if old.Pcc == '1' %} selected {% endif %}>present</option>
+                                                <option value="2" {% if old.Pcc == '2' %} selected {% endif %}>not present</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Ba">Bacteria (Ba)</label>
+                                            <select class="custom-select rounded-0" id="Ba" name="Ba">
+                                                <option value="1" {% if old.Ba == '1' %} selected {% endif %}>present</option>
+                                                <option value="2" {% if old.Ba == '2' %} selected {% endif %}>not present</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Bgr">Blood Glucose Random (Bgr)</label>
+                                        <input type="text" class="form-control rounded-0" id="Bgr" name="Bgr" value="{% if old.Bgr %}{{ old.Bgr }}{% else %}131{% endif %}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Bu">Blood Urea (Bu)</label>
+                                        <input type="text" class="form-control rounded-0" id="Bu" name="Bu" value="{% if old.Bu %}{{ old.Bu }}{% else %}18{% endif %}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Sc">Serum Creatinine (Sc)</label>
+                                        <input type="text" class="form-control rounded-0" id="Sc" name="Sc" value="{% if old.Sc %}{{ old.Sc }}{% else %}1.1{% endif %}">
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-md-3">
+                                        <label for="Sod">Sodium (Sod)</label>
+                                        <input type="text" class="form-control rounded-0" id="Sod" name="Sod" value="{% if old.Sod %}{{ old.Sod }}{% else %}141{% endif %}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Pot">Potassium (Pot)</label>
+                                        <input type="text" class="form-control rounded-0" id="Pot" name="Pot" value="{% if old.Pot %}{{ old.Pot }}{% else %}3.5{% endif %}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Hemo">Hemoglobin (Hemo)</label>
+                                        <input type="text" class="form-control rounded-0" id="Hemo" name="Hemo" value="{% if old.Hemo %}{{ old.Hemo }}{% else %}15.8{% endif %}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Pcv">Packed  Cell Volume (Pcv)</label>
+                                        <input type="text" class="form-control rounded-0" id="Pcv" name="Pcv" value="{% if old.Pcv %}{{ old.Pcv }}{% else %}53{% endif %}">
+                                    </div>
+                                </div>
+                                <div class="row mb-1">
+                                    <div class="col-md-3">
+                                        <label for="Wc">White Blood Cell Count (Wc)</label>
+                                        <input type="text" class="form-control rounded-0" id="Wc" name="Wc" value="{% if old.Wc %}{{ old.Wc }}{% else %}6800{% endif %}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="Rc">Red Blood Cell Count (Rc)</label>
+                                        <input type="text" class="form-control rounded-0" id="Rc" name="Rc" value="{% if old.Rc %}{{ old.Rc }}{% else %}6.1{% endif %}">
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Htn">Hypertension (Htn)</label>
+                                            <select class="custom-select rounded-0" id="Htn" name="Htn">
+                                                <option value="1" {% if old.Htn == '1' %} selected {% endif %}>yes</option>
+                                                <option value="2" {% if old.Htn == '2' %} selected {% endif %}>no</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Dm">Diabetes Mellitus (Dm)</label>
+                                            <select class="custom-select rounded-0" id="Dm" name="Dm">
+                                                <option value="1" {% if old.Dm == '1' %} selected {% endif %}>yes</option>
+                                                <option value="2" {% if old.Dm == '2' %} selected {% endif %}>no</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Cad">Coronary Artery Disease (Cad)</label>
+                                            <select class="custom-select rounded-0" id="Cad" name="Cad">
+                                                <option value="1" {% if old.Cad == '1' %} selected {% endif %}>yes</option>
+                                                <option value="2" {% if old.Cad == '2' %} selected {% endif %}>no</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Appet">Appetite (Appet)</label>
+                                            <select class="custom-select rounded-0" id="Appet" name="Appet">
+                                                <option value="1" {% if old.Appet == '1' %} selected {% endif %}>good</option>
+                                                <option value="2" {% if old.Appet == '2' %} selected {% endif %}>poor</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Pe">Pedal Edema (Pe)</label>
+                                            <select class="custom-select rounded-0" id="Pe" name="Pe">
+                                                <option value="1" {% if old.Pe == '1' %} selected {% endif %}>yes</option>
+                                                <option value="2" {% if old.Pe == '2' %} selected {% endif %}>no</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="Ane">Anemia (Ane)</label>
+                                            <select class="custom-select rounded-0" id="Ane" name="Ane">
+                                                <option value="1" {% if old.Ane == '1' %} selected {% endif %}>yes</option>
+                                                <option value="2" {% if old.Ane == '2' %} selected {% endif %}>no</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-block btn-info"><b>Diagnosis</b></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- HASIL DIAGNOSIS -->
+            {% if hasil %}
+            <div class="row mb-2">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline text-center">
+                        <div class="card-body">
+                            <h5>HASIL DIAGNOSIS</h5><hr>
+                            {% if hasil == '1' %}
+                            <h3 class="text-danger font-weight-bold"> TERIDENTIFIKASI PENYAKIT GINJAL KRONIS</h3>
+                            {% else %}
+                            <h3 class="text-success font-weight-bold">TIDAK TERIDENTIFIKASI PENYAKIT GINJAL KRONIS</h3>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+                
+            <!-- RULES -->
+            <div class="row pb-2">
+                <div class="col-md-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header">
+                            <button type="button" class="btn btn-sm btn-info float-right" data-toggle="modal" data-target="#modal-default"><i class="fas fa-sync-alt mr-2"></i>Perbarui Rules</button>
+                            <h3 class="card-title mt-1">
+                                <b>Decision Tree</b>
+                            </h3>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                {% for value in rules %}
+                                    {% if value.id == rule_benar %}
+                                    <li class="list-group-item list-group-item-info">{{ value.rule }}</li>
+                                    {% else %}
+                                    <li class="list-group-item">{{ value.rule }}</li>
+                                    {% endif %}
+                                {% endfor %}
+                                <!-- <li class="list-group-item list-group-item-info">IF Htn = no AND Rbc = abnormal Then ckd</li> -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+  </section>
+</div>
+
+<!-- MODAL -->
+<div class="modal fade" id="modal-default">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Input Parameter</b></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="{% url 'skripsi:update_rules' %}" method="post">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label for="partikel">Jumlah partikel</label>
+                            <input type="text" class="form-control rounded-0" id="partikel" name="partikel" value="15" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="iterasi">Jumlah iterasi</label>
+                            <input type="text" class="form-control rounded-0" id="iterasi" name="iterasi" value="40" required>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-12">
+                            <label for="w">Inertia weight (w)</label>
+                            <input type="text" class="form-control rounded-0" id="w" name="w" value="0.9" required>
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-md-6">
+                            <label for="c1">Faktor cognitive learning (c1)</label>
+                            <input type="text" class="form-control rounded-0" id="c1" name="c1" value="1" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="c2">Faktor social learning (c2)</label>
+                            <input type="text" class="form-control rounded-0" id="c2" name="c2" value="1.2" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cencel</button>
+                    <button type="submit" class="btn btn-info"><i class="fas fa-sync-alt mr-2"></i>Proses</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+    
