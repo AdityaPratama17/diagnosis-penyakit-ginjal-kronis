@@ -1,2 +1,2 @@
-web: waitress-serve --listen=*:8000 projectskripsi.wsgi:application
+web: gunicorn projectskripsi.wsgi
 release: python manage.py migrate
