@@ -343,9 +343,9 @@
                                                     <h3 class="card-title">Rules</h3>
                                                 </div>
                                                 <div class="card-body p-0">
-                                                    <ul class="list-group list-group-flush">                                                    
+                                                    <ul class="list-group list-group-flush">
                                                         {% for i in value.tree %}
-                                                        <li class="list-group-item">{{ i }}</li>
+                                                        <li class="list-group-item">{{ i|safe }}</li>
                                                         {% endfor %}
                                                     </ul>
                                                 </div>

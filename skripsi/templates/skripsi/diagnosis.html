@@ -41,11 +41,11 @@
                                         <div class="form-group">
                                             <label for="Sg">Specific gravity (Sg)</label>
                                             <select class="custom-select rounded-0" id="Sg" name="Sg">
-                                                <option value="1" {% if old.Sg == '1' %} selected {% endif %}>1.005</option>
-                                                <option value="2" {% if old.Sg == '2' %} selected {% endif %}>1.010</option>
-                                                <option value="3" {% if old.Sg == '3' %} selected {% endif %}>1.015</option>
-                                                <option value="4" {% if old.Sg == '4' %} selected {% endif %}>1.020</option>
-                                                <option value="5" {% if old.Sg == '5' %} selected {% endif %}>1.025</option>
+                                                <option value="1.005" {% if old.Sg == '1.005' %} selected {% endif %}>1.005</option>
+                                                <option value="1.010" {% if old.Sg == '1.010' %} selected {% endif %}>1.010</option>
+                                                <option value="1.015" {% if old.Sg == '1.015' %} selected {% endif %}>1.015</option>
+                                                <option value="1.020" {% if old.Sg == '1.020' %} selected {% endif %}>1.020</option>
+                                                <option value="1.025" {% if old.Sg == '1.025' %} selected {% endif %}>1.025</option>
                                             </select>
                                         </div>
                                     </div>
@@ -53,12 +53,12 @@
                                         <div class="form-group">
                                             <label for="Al">Albumin (Al)</label>
                                             <select class="custom-select rounded-0" id="Al" name="Al">
-                                                <option value="1" {% if old.Al == '1' %} selected {% endif %}>0</option>
-                                                <option value="2" {% if old.Al == '2' %} selected {% endif %}>1</option>
-                                                <option value="3" {% if old.Al == '3' %} selected {% endif %}>2</option>
-                                                <option value="4" {% if old.Al == '4' %} selected {% endif %}>3</option>
-                                                <option value="5" {% if old.Al == '5' %} selected {% endif %}>4</option>
-                                                <option value="6" {% if old.Al == '6' %} selected {% endif %}>5</option>
+                                                <option value="0" {% if old.Al == '0' %} selected {% endif %}>0</option>
+                                                <option value="1" {% if old.Al == '1' %} selected {% endif %}>1</option>
+                                                <option value="2" {% if old.Al == '2' %} selected {% endif %}>2</option>
+                                                <option value="3" {% if old.Al == '3' %} selected {% endif %}>3</option>
+                                                <option value="4" {% if old.Al == '4' %} selected {% endif %}>4</option>
+                                                <option value="5" {% if old.Al == '5' %} selected {% endif %}>5</option>
                                             </select>
                                         </div>
                                     </div>
@@ -68,12 +68,12 @@
                                         <div class="form-group">
                                             <label for="Su">Sugar (Su)</label>
                                             <select class="custom-select rounded-0" id="Su" name="Su">
-                                                <option value="1" {% if old.Su == '1' %} selected {% endif %}>0</option>
-                                                <option value="2" {% if old.Su == '2' %} selected {% endif %}>1</option>
-                                                <option value="3" {% if old.Su == '3' %} selected {% endif %}>2</option>
-                                                <option value="4" {% if old.Su == '4' %} selected {% endif %}>3</option>
-                                                <option value="5" {% if old.Su == '5' %} selected {% endif %}>4</option>
-                                                <option value="6" {% if old.Su == '6' %} selected {% endif %}>5</option>
+                                                <option value="0" {% if old.Su == '0' %} selected {% endif %}>0</option>
+                                                <option value="1" {% if old.Su == '1' %} selected {% endif %}>1</option>
+                                                <option value="2" {% if old.Su == '2' %} selected {% endif %}>2</option>
+                                                <option value="3" {% if old.Su == '3' %} selected {% endif %}>3</option>
+                                                <option value="4" {% if old.Su == '4' %} selected {% endif %}>4</option>
+                                                <option value="5" {% if old.Su == '5' %} selected {% endif %}>5</option>
                                             </select>
                                         </div>
                                     </div>
@@ -81,8 +81,8 @@
                                         <div class="form-group">
                                             <label for="Rbc">Red blood cells (Rbc)</label>
                                             <select class="custom-select rounded-0" id="Rbc" name="Rbc">
-                                                <option value="1" {% if old.Rbc == '1' %} selected {% endif %}>normal</option>
-                                                <option value="2" {% if old.Rbc == '2' %} selected {% endif %}>abnormal</option>
+                                                <option value="normal" {% if old.Rbc == 'normal' %} selected {% endif %}>normal</option>
+                                                <option value="abnormal" {% if old.Rbc == 'abnormal' %} selected {% endif %}>abnormal</option>
                                             </select>
                                         </div>
                                     </div>
@@ -90,8 +90,8 @@
                                         <div class="form-group">
                                             <label for="Pc">Pus cell (Pc)</label>
                                             <select class="custom-select rounded-0" id="Pc" name="Pc">
-                                                <option value="1" {% if old.Pc == '1' %} selected {% endif %}>normal</option>
-                                                <option value="2" {% if old.Pc == '2' %} selected {% endif %}>abnormal</option>
+                                                <option value="normal" {% if old.Pc == 'normal' %} selected {% endif %}>normal</option>
+                                                <option value="abnormal" {% if old.Pc == 'abnormal' %} selected {% endif %}>abnormal</option>
                                             </select>
                                         </div>
                                     </div>
@@ -99,8 +99,8 @@
                                         <div class="form-group">
                                             <label for="Pcc">Pus cell clumps (Pcc)</label>
                                             <select class="custom-select rounded-0" id="Pcc" name="Pcc">
-                                                <option value="1" {% if old.Pcc == '1' %} selected {% endif %}>present</option>
-                                                <option value="2" {% if old.Pcc == '2' %} selected {% endif %}>not present</option>
+                                                <option value="present" {% if old.Pcc == 'present' %} selected {% endif %}>present</option>
+                                                <option value="notpresent" {% if old.Pcc == 'notpresent' %} selected {% endif %}>not present</option>
                                             </select>
                                         </div>
                                     </div>
@@ -110,8 +110,8 @@
                                         <div class="form-group">
                                             <label for="Ba">Bacteria (Ba)</label>
                                             <select class="custom-select rounded-0" id="Ba" name="Ba">
-                                                <option value="1" {% if old.Ba == '1' %} selected {% endif %}>present</option>
-                                                <option value="2" {% if old.Ba == '2' %} selected {% endif %}>not present</option>
+                                                <option value="present" {% if old.Ba == 'present' %} selected {% endif %}>present</option>
+                                                <option value="notpresent" {% if old.Ba == 'notpresent' %} selected {% endif %}>not present</option>
                                             </select>
                                         </div>
                                     </div>
@@ -159,8 +159,8 @@
                                         <div class="form-group">
                                             <label for="Htn">Hypertension (Htn)</label>
                                             <select class="custom-select rounded-0" id="Htn" name="Htn">
-                                                <option value="1" {% if old.Htn == '1' %} selected {% endif %}>yes</option>
-                                                <option value="2" {% if old.Htn == '2' %} selected {% endif %}>no</option>
+                                                <option value="yes" {% if old.Htn == 'yes' %} selected {% endif %}>yes</option>
+                                                <option value="no" {% if old.Htn == 'no' %} selected {% endif %}>no</option>
                                             </select>
                                         </div>
                                     </div>
@@ -168,8 +168,8 @@
                                         <div class="form-group">
                                             <label for="Dm">Diabetes Mellitus (Dm)</label>
                                             <select class="custom-select rounded-0" id="Dm" name="Dm">
-                                                <option value="1" {% if old.Dm == '1' %} selected {% endif %}>yes</option>
-                                                <option value="2" {% if old.Dm == '2' %} selected {% endif %}>no</option>
+                                                <option value="yes" {% if old.Dm == 'yes' %} selected {% endif %}>yes</option>
+                                                <option value="no" {% if old.Dm == 'no' %} selected {% endif %}>no</option>
                                             </select>
                                         </div>
                                     </div>
@@ -179,8 +179,8 @@
                                         <div class="form-group">
                                             <label for="Cad">Coronary Artery Disease (Cad)</label>
                                             <select class="custom-select rounded-0" id="Cad" name="Cad">
-                                                <option value="1" {% if old.Cad == '1' %} selected {% endif %}>yes</option>
-                                                <option value="2" {% if old.Cad == '2' %} selected {% endif %}>no</option>
+                                                <option value="yes" {% if old.Cad == 'yes' %} selected {% endif %}>yes</option>
+                                                <option value="no" {% if old.Cad == 'no' %} selected {% endif %}>no</option>
                                             </select>
                                         </div>
                                     </div>
@@ -188,8 +188,8 @@
                                         <div class="form-group">
                                             <label for="Appet">Appetite (Appet)</label>
                                             <select class="custom-select rounded-0" id="Appet" name="Appet">
-                                                <option value="1" {% if old.Appet == '1' %} selected {% endif %}>good</option>
-                                                <option value="2" {% if old.Appet == '2' %} selected {% endif %}>poor</option>
+                                                <option value="good" {% if old.Appet == 'good' %} selected {% endif %}>good</option>
+                                                <option value="poor" {% if old.Appet == 'poor' %} selected {% endif %}>poor</option>
                                             </select>
                                         </div>
                                     </div>
@@ -197,8 +197,8 @@
                                         <div class="form-group">
                                             <label for="Pe">Pedal Edema (Pe)</label>
                                             <select class="custom-select rounded-0" id="Pe" name="Pe">
-                                                <option value="1" {% if old.Pe == '1' %} selected {% endif %}>yes</option>
-                                                <option value="2" {% if old.Pe == '2' %} selected {% endif %}>no</option>
+                                                <option value="yes" {% if old.Pe == 'yes' %} selected {% endif %}>yes</option>
+                                                <option value="no" {% if old.Pe == 'no' %} selected {% endif %}>no</option>
                                             </select>
                                         </div>
                                     </div>
@@ -206,8 +206,8 @@
                                         <div class="form-group">
                                             <label for="Ane">Anemia (Ane)</label>
                                             <select class="custom-select rounded-0" id="Ane" name="Ane">
-                                                <option value="1" {% if old.Ane == '1' %} selected {% endif %}>yes</option>
-                                                <option value="2" {% if old.Ane == '2' %} selected {% endif %}>no</option>
+                                                <option value="yes" {% if old.Ane == 'yes' %} selected {% endif %}>yes</option>
+                                                <option value="no" {% if old.Ane == 'no' %} selected {% endif %}>no</option>
                                             </select>
                                         </div>
                                     </div>
@@ -226,7 +226,7 @@
                     <div class="card card-primary card-outline text-center">
                         <div class="card-body">
                             <h5>HASIL DIAGNOSIS</h5><hr>
-                            {% if hasil == '1' %}
+                            {% if hasil == 'ckd' %}
                             <h3 class="text-danger font-weight-bold"> TERIDENTIFIKASI PENYAKIT GINJAL KRONIS</h3>
                             {% else %}
                             <h3 class="text-success font-weight-bold">TIDAK TERIDENTIFIKASI PENYAKIT GINJAL KRONIS</h3>
@@ -251,9 +251,9 @@
                             <ul class="list-group list-group-flush">
                                 {% for value in rules %}
                                     {% if value.id == rule_benar %}
-                                    <li class="list-group-item list-group-item-info">{{ value.rule }}</li>
+                                    <li class="list-group-item list-group-item-info">{{ value.rule|safe }}</li>
                                     {% else %}
-                                    <li class="list-group-item">{{ value.rule }}</li>
+                                    <li class="list-group-item">{{ value.rule|safe }}</li>
                                     {% endif %}
                                 {% endfor %}
                                 <!-- <li class="list-group-item list-group-item-info">IF Htn = no AND Rbc = abnormal Then ckd</li> -->

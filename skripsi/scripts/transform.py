@@ -67,10 +67,10 @@ def transf_instance(ranges,instance,atribut):
     for range in ranges:
         for i,r in enumerate(ranges[range]):
             if i == 0:
-                instanceNew[range][i+1] = ' <= '+str(r)
+                instanceNew[range][i+1] = ' &#8804 '+str(r)
             elif i == len(ranges[range])-1:
                 instanceNew[range][i+1] = ' > '+str(r)
             else:
-                instanceNew[range][i+1] = ' > '+str(r[0])+' AND '+atribut[range]+' <= '+str(r[1])
+                instanceNew[range][i+1] = ' > '+str(r[0])+' AND '+atribut[range]+' &#8804 '+str(r[1])
     return instanceNew
 

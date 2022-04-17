@@ -61,9 +61,11 @@ def create_rule(dataset,instance,atribut,seleksi,atrNumerik):
             elif i >= 1: temp += ' AND '
             if type(node) is not int: 
                 if node['atr_name'] in atrNumerik.values():
-                    temp += str(atribut[node['atr']])+str(instance[node['atr']][node['ins']])
+                    # temp += str(atribut[node['atr']])+str(instance[node['atr']][node['ins']])
+                    temp += str(node['atr_name'])+str(instance[node['atr']][node['ins']])
                 else:
-                    temp += str(atribut[node['atr']])+' = '+str(instance[node['atr']][node['ins']])
+                    # temp += str(atribut[node['atr']])+' = '+str(instance[node['atr']][node['ins']])
+                    temp += str(node['atr_name'])+' = '+str(instance[node['atr']][node['ins']])
             else: temp += str(instance[-1][node])
         finalRule.append(temp)
         # print(temp)
@@ -72,7 +74,7 @@ def create_rule(dataset,instance,atribut,seleksi,atrNumerik):
 
 def createDecisionTree(atribut,data_raw,dataset,instance,rule,ruleSet,tree,treeSet):
     # SELECTED DATA
-    newDataset, new_data_raw = filter_data(data_raw,dataset,rule)
+    newDataset,new_data_raw = filter_data(data_raw,dataset,rule)
 
     # ENTROPY TOTAL
     indexKelas = len(rule)-1

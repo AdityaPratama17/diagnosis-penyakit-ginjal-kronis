@@ -12,4 +12,5 @@ urlpatterns = [
     path('split_data', views.split_data, name="split_data"),
     path('hasil_uji', views.hasil_uji, name="hasil_uji"),
     path('hasil_uji_akselerasi', views.hasil_uji_akselerasi, name="hasil_uji_akselerasi"),
+    path('uji_overfitting', views.uji_overfitting, name="uji_overfitting"),
 ]

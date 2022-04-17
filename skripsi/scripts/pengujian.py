@@ -4,25 +4,23 @@ from skripsi.models import KFCV
 import time,random
 
 def k_fold_cross_validation(k_CV,dataset,instance,atribut,seleksi,atrNumerik):
-    # SET DATA TESTING ALL FOLD
-    kfcv = KFCV.objects.filter().values()
-    dataTrain = [[],[],[],[],[],[],[],[],[],[]]
-    dataTest = [[],[],[],[],[],[],[],[],[],[]]
-    for k in kfcv:
-        if k['jenis'] == 'train':
-            dataTrain[k['fold']-1].append(dataset[k['id_data']-1])
-        else:
-            dataTest[k['fold']-1].append(dataset[k['id_data']-1])
-        
-    # INIT VARIABLE FRONTEND
+    kfcv = KFCV.objects.filter().values()        
     result_avg = {'accuracy':0, 'recall':0, 'precision':0, 'f_measure':0, 'time':0}
     pengujian = {}
-
     for i in range(10):
-        # ==== C4.5 ========================================
+        # GET DATA TRAIN & DATA TEST
+        dataTest = []
+        dataTrain = []
+        for data in kfcv:
+            if data['fold'] == i+1:
+                dataTest.append(dataset[data['id_data']-1])
+            elif data['fold'] != i+1 and data['fold'] != 0:
+                dataTrain.append(dataset[data['id_data']-1])
+
+        # C4.5 
         start = time.perf_counter()
-        rule,ruleAtr,tree = create_rule(dataTrain[i],instance,atribut,seleksi,atrNumerik)
-        acc,cm = confusion_matrix(dataTest[i],rule)
+        rule,ruleAtr,tree = create_rule(dataTrain,instance,atribut,seleksi,atrNumerik)
+        acc,cm = confusion_matrix(dataTest,rule)
         end = time.perf_counter()
         
         # SAVE DATA

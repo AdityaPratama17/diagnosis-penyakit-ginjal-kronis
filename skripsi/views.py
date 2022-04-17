@@ -6,6 +6,8 @@ from skripsi.scripts.bpso import feature_selection as bpso
 from skripsi.scripts.bpso_uji import feature_selection as bpso_uji
 from skripsi.scripts.c45 import selection
 from skripsi.scripts.pengujian import k_fold_cross_validation
+from skripsi.scripts.c45 import create_rule
+from skripsi.scripts.confusion_matrix import confusion_matrix
 import pandas as pd, random, time
 import io,urllib,base64,csv
 import matplotlib.pyplot as plt
@@ -150,30 +152,34 @@ def update_rules(request):
 
     # INSERT MODEL TO DATABASE
     # -- data ranges
-    atribut_numerik = ['Age','Bp','Sg','Al','Su','Rbc','Pc','Pcc','Ba','Bgr','Bu','Sc','Sod','Pot','Hemo','Pcv','Wc','Rc','Htn','Dm','Cad','Appet','Pe','Ane','Class']
+    atribut_name = ['Age','Bp','Sg','Al','Su','Rbc','Pc','Pcc','Ba','Bgr','Bu','Sc','Sod','Pot','Hemo','Pcv','Wc','Rc','Htn','Dm','Cad','Appet','Pe','Ane','Class']
     Range.objects.all().delete()
     iter = 1
     for atr,range in ranges.items():
         for i,value in enumerate(range):
             if i == 0:
-                Range.objects.create(id=iter, atribut=atribut_numerik[atr], min='-', max=str(value), diskrit=i+1)
+                Range.objects.create(id=iter, atribut=atribut_name[atr], min='-', max=str(value), diskrit=i+1)
             elif i == len(range)-1:
-                Range.objects.create(id=iter, atribut=atribut_numerik[atr], min=str(value), max='-', diskrit=i+1)
+                Range.objects.create(id=iter, atribut=atribut_name[atr], min=str(value), max='-', diskrit=i+1)
             else:
-                Range.objects.create(id=iter, atribut=atribut_numerik[atr], min=str(value[0]), max=str(value[1]), diskrit=i+1)
+                Range.objects.create(id=iter, atribut=atribut_name[atr], min=str(value[0]), max=str(value[1]), diskrit=i+1)
             iter += 1
 
     # -- data rules
     Rule.objects.all().delete()
     Detail_Rule.objects.all().delete()
+    atrNumerik_name = ['Age', 'Bp', 'Bgr', 'Bu', 'Sc', 'Sod', 'Pot', 'Hemo', 'Pcv', 'Wc', 'Rc']
     iter = 1
     for i,rule in enumerate(ruleAtr):
         for j,item in enumerate(rule):
             if j != len(rule)-1:
-                Detail_Rule.objects.create(id=iter, id_rule=i+1, atribut=item['atr_name'], value=item['ins'])
+                if item['atr_name'] in atrNumerik_name:
+                    Detail_Rule.objects.create(id=iter, id_rule=i+1, atribut=item['atr_name'], value=item['ins'])
+                else:
+                    Detail_Rule.objects.create(id=iter, id_rule=i+1, atribut=item['atr_name'], value=instance[item['atr']][item['ins']])
                 iter+=1
             else:
-                Rule.objects.create(id=i+1, kelas=item, rule=tree[i])
+                Rule.objects.create(id=i+1, kelas=instance[-1][item], rule=tree[i])
     
     return redirect('skripsi:diagnosis')
 
@@ -311,44 +317,120 @@ def split_data(request):
         KFCV.objects.all().delete()
         data = Dataset.objects.filter().values()
         rand = random.sample(range(0,400), 400)
-        sum = [
-            {'ckd':0,'notckd':0},
-            {'ckd':0,'notckd':0},
-            {'ckd':0,'notckd':0},
-            {'ckd':0,'notckd':0},
-            {'ckd':0,'notckd':0},
-            {'ckd':0,'notckd':0},
-            {'ckd':0,'notckd':0},
-            {'ckd':0,'notckd':0},
-            {'ckd':0,'notckd':0},
-            {'ckd':0,'notckd':0},
+        test = {'ckd':50,'notckd':30}
+        train = [
+            {'ckd':20,'notckd':12},
+            {'ckd':20,'notckd':12},
+            {'ckd':20,'notckd':12},
+            {'ckd':20,'notckd':12},
+            {'ckd':20,'notckd':12},
+            {'ckd':20,'notckd':12},
+            {'ckd':20,'notckd':12},
+            {'ckd':20,'notckd':12},
+            {'ckd':20,'notckd':12},
+            {'ckd':20,'notckd':12},
         ]
-        
-        iter = 1
-        test = []
-        for i,fold in enumerate(sum):
-            for j,id in enumerate(rand):
-                if id not in test:
-                    if data[id]['Class'] == 'ckd':
-                        if fold['ckd'] < 25:
-                            KFCV.objects.create(id=iter, id_data=data[id]['id'], fold=i+1, jenis='test')
-                            fold['ckd'] += 1
-                            test.append(id)
-                        else:
-                            KFCV.objects.create(id=iter, id_data=data[id]['id'], fold=i+1, jenis='train')
-                    else:
-                        if fold['notckd'] < 15:
-                            KFCV.objects.create(id=iter, id_data=data[id]['id'], fold=i+1, jenis='test')
-                            fold['notckd'] += 1
-                            test.append(id)
-                        else:
-                            KFCV.objects.create(id=iter, id_data=data[id]['id'], fold=i+1, jenis='train')
-                else:
-                    KFCV.objects.create(id=iter, id_data=data[id]['id'], fold=i+1, jenis='train')
-                iter += 1
 
-    
+        for iter,id in enumerate(rand):
+            flag = True
+            if data[id]['Class'] == 'ckd' and test['ckd'] > 0:
+                KFCV.objects.create(id=iter+1, id_data=data[id]['id'], fold=0, jenis='test')
+                test['ckd'] -= 1
+                flag = False
+            elif data[id]['Class'] == 'notckd' and test['notckd'] > 0:
+                KFCV.objects.create(id=iter+1, id_data=data[id]['id'], fold=0, jenis='test')
+                test['notckd'] -= 1
+                flag = False
+            
+            if flag:
+                for j,fold in enumerate(train):
+                    if data[id]['Class'] == 'ckd' and fold['ckd'] > 0:
+                        KFCV.objects.create(id=iter+1, id_data=data[id]['id'], fold=j+1, jenis='train')
+                        fold['ckd'] -= 1
+                        break
+                    elif data[id]['Class'] == 'notckd' and fold['notckd'] > 0:
+                        KFCV.objects.create(id=iter+1, id_data=data[id]['id'], fold=j+1, jenis='train')
+                        fold['notckd'] -= 1
+                        break
+
     return render(request, 'skripsi/split_data.html')
+
+def uji_overfitting(request):
+    if request.method == 'POST':
+        # GET DATASET FROM DB
+        dataset_db = Dataset.objects.filter().values()
+        dataset = []
+        for data in dataset_db:
+            temp_arr = []
+            for key,value in data.items():
+                if key != 'id':
+                    temp_arr.append(value)
+            dataset.append(temp_arr)
+        
+        # GET DATASET FROM DB
+        dataset_db = Dataset.objects.filter().values()
+        dataset = []
+        for data in dataset_db:
+            temp_arr = []
+            for key,value in data.items():
+                if key != 'id':
+                    temp_arr.append(value)
+            dataset.append(temp_arr)
+
+        # K-MEANS
+        atribut_all = ['Age','Bp','Sg','Al','Su','Rbc','Pc','Pcc','Ba','Bgr','Bu','Sc','Sod','Pot','Hemo','Pcv','Wc','Rc','Htn','Dm','Cad','Appet','Pe','Ane','Class']
+        # -- GET RANGES FROM DB
+        ranges_db = Range_pengujian.objects.filter().values()
+        ranges = {}
+        for range in ranges_db:
+            if atribut_all.index(range['atribut']) not in ranges:
+                ranges[atribut_all.index(range['atribut'])] = []
+            if range['min']=='-':
+                ranges[atribut_all.index(range['atribut'])].append(float(range['max']))
+            elif range['max']=='-':
+                ranges[atribut_all.index(range['atribut'])].append(float(range['min']))
+            else:
+                ranges[atribut_all.index(range['atribut'])].append([float(range['min']),float(range['max'])])
+        
+        # TRANSFORMASI
+        dataset,instance,atribut,atrNumerik = transform(dataset,ranges)
+
+        # BPSO
+        partikel = 15
+        iterasi = 40
+        w = 0.9
+        c1 = 1
+        c2 = 1.2
+        seleksi,result_avg,pengujian = bpso(dataset,instance,atribut,atrNumerik,partikel,iterasi,w,c1,c2)
+        dataset,instance,atribut,atrNumerik = selection(dataset,instance,atribut,seleksi,atrNumerik)
+
+        # C4.5
+        # -- get data train test
+        kfcv = KFCV.objects.filter().values()        
+        dataTest = []
+        dataTrain = []
+        for data in kfcv:
+            if data['jenis'] == 'test':
+                dataTest.append(dataset[data['id_data']-1])
+            elif data['jenis'] == 'train':
+                dataTrain.append(dataset[data['id_data']-1])
+        # -- do train test
+        rule,ruleAtr,tree = create_rule(dataTrain,instance,atribut,seleksi,atrNumerik)
+        acc,cm = confusion_matrix(dataTest,rule)
+        accuracy = round(((cm[0]+cm[1])/sum(cm))*100, 3)
+        recall = round((cm[0]/(cm[0]+cm[3]))*100, 3)
+        precision = round((cm[0]/(cm[0]+cm[2]))*100, 3)
+        f_measure = round(2*(recall*precision)/(recall+precision), 3)
+
+        context ={
+            'accuracy' : accuracy,
+            'recall' : recall,
+            'precision' : precision,
+            'f_measure' : f_measure,
+        }
+        return render(request, 'skripsi/uji_overfitting.html', context)
+
+    return render(request, 'skripsi/uji_overfitting.html')
 
 
 # ============= PENGUJIAN UNTUK SKRIPSI =============
@@ -358,19 +440,20 @@ def hasil_uji(request):
         dataset,instance,atribut,atrNumerik = get_data()
         
         # set param
-        partikel = 15
         iterasi = 40
-        w = 1.2
-        c1 = c2 = 2
+        partikel = 15
+        w = 0.9
+        c1 = 1
+        c2 = 1.2
         error = 0.1
         
         start = time.perf_counter()
         arr_hasil = []
         old = 0
-        i = 11
-        while(i<=15): 
+        i = 0.1
+        while(i<=1): 
             # -- param check
-            c1 = c2 = i
+            w = i
             # -- evaluate
             hasil,time_bpso,jum_seleksi = evaluasi(dataset,instance,atribut,atrNumerik,partikel,iterasi,w,c1,c2,i)
             # -- update dict
@@ -389,7 +472,7 @@ def hasil_uji(request):
 
             print(i,'. now:',hasil['accuracy'],', before:',old,', selisih:',hasil['selisih'])
             old = hasil['accuracy']
-            i += 1
+            i += 0.1
         # -- print in csv
         cetak_csv(arr_hasil)
         end = time.perf_counter()
