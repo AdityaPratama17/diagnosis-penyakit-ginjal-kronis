@@ -79,14 +79,14 @@ WSGI_APPLICATION = 'projectskripsi.wsgi.application'
 
 DATABASES = {
     'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        'ENGINE': 'django.db.backends.mysql',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': 'skripsi',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': 'localhost',
-        'POST': '3306',
+        'ENGINE': 'django.db.backends.sqlite3',
+        # 'ENGINE': 'django.db.backends.mysql',
+        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'NAME': 'skripsi',
+        # 'USER': 'root',
+        # 'PASSWORD': '',
+        # 'HOST': 'localhost',
+        # 'POST': '3306',
     }
 }
 if os.environ.get('DATABASE_URL'):
