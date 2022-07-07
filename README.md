@@ -1,0 +1,3 @@
+Sistem berbasis web ini digunakan untuk melakukan klasifikasi ginjal kronis. Sistem ini dibangun menggunakan Framework Django, bahasa pemrograman yaitu Python, HTML, CSS, Javascript, dan menggunakan DBMS yaitu MySQL.
+
+Dalam mengklasifikasi penyakit ginjal kronis, sistem ini menggunakan algoritma C4.5, K-Means dan Binary Particle Swarm Optimization (BPSO). C4.5 merupakan algoritma machine learning yang memanfaatkan pendekatan rule base atau decision tree dalam melakukan klasifikasi. Algoritma K-Means adalah algoritma clustering yang digunakan untuk melakukan diskritisasi data. Algoritma BPSO merupakan algoritma optimisasi yang digunakan untuk melakukan seleksi fitur pada data penyakit ginjal kronis. 
